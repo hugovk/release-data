@@ -18,29 +18,26 @@ REGEX = r"^(?:(\d+\.(?:\d+\.)*\d+))$"
 #   GitHub CLI (and still requires a GITHUB_TOKEN).
 def fetch_json(repo_id):
     (owner, repo) = repo_id.split("/")
-    query = """gh api graphql --paginate -f query='
-query($endCursor: String) {
-  repository(name: "%s", owner: "%s") {
+    query = f"""gh api graphql --paginate -f query='
+query($endCursor: String) {{
+  repository(name: "{repo}", owner: "{owner}") {{
     releases(
-      orderBy: {field: NAME, direction: ASC}
+      orderBy: {{field: NAME, direction: ASC}}
       first: 100
       after: $endCursor
-    ) {
-      pageInfo { hasNextPage, endCursor }
-      edges {
-        node {
+    ) {{
+      pageInfo {{ hasNextPage, endCursor }}
+      edges {{
+        node {{
           name
           publishedAt
           isPrerelease
-        }
-      }
-    }
-  }
-}' --jq '.data.repository.releases.edges.[].node | select(.isPrerelease == false) | [.name, .publishedAt] | join(",")'
-""" % (
-        repo,
-        owner,
-    )
+        }}
+      }}
+    }}
+  }}
+}}' --jq '.data.repository.releases.edges.[].node | select(.isPrerelease == false) | [.name, .publishedAt] | join(",")'
+"""
 
     child = subprocess.Popen(query, shell=True, stdout=subprocess.PIPE)
     return child.communicate()[0].decode("utf-8")
