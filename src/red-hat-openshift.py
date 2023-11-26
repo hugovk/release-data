@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+
 from common import endoflife
 from common.git import Git
 
@@ -26,6 +27,7 @@ def get_versions_from_file(release_notes_file: Path) -> dict:
             re.MULTILINE,
         )
     }
+
 
 git = Git(REPO_URL)
 git.setup()

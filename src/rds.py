@@ -1,7 +1,7 @@
 import re
+
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 
 VERSION_REGEX = r"(?P<v>\d+(?:\.\d+)*)"  # https://regex101.com/r/BY1vwV/1
 DBS = {
@@ -23,7 +23,9 @@ for db, url in DBS.items():
             # Must match both the 'Supported XXX minor versions' and
             # 'Supported XXX major versions' to have correct release dates
             if len(columns) > 3:
-                m = re.search(VERSION_REGEX, columns[0].text.strip(), flags=re.IGNORECASE)
+                m = re.search(
+                    VERSION_REGEX, columns[0].text.strip(), flags=re.IGNORECASE
+                )
                 if m:
                     date = dates.parse_date(columns[2].text).strftime("%Y-%m-%d")
                     if date:

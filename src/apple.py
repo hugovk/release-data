@@ -1,7 +1,7 @@
 import re
+
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 
 URLS = [
     "https://support.apple.com/en-us/HT201222",  # latest
@@ -37,11 +37,11 @@ CONFIG = {
     ],
     "ipados": [
         r"iPadOS\s+(?P<version>\d+)",
-        r"iPadOS\s+(?P<version>\d+(?:)(?:\.\d+)+)"
+        r"iPadOS\s+(?P<version>\d+(?:)(?:\.\d+)+)",
     ],
     "watchos": [
         r"watchOS\s+(?P<version>\d+)",
-        r"watchOS\s+(?P<version>\d+(?:)(?:\.\d+)+)"
+        r"watchOS\s+(?P<version>\d+(?:)(?:\.\d+)+)",
     ],
 }
 
@@ -57,7 +57,9 @@ versions_by_product = {k: {} for k in CONFIG.keys()}
 for response in endoflife.fetch_urls(URLS):
     soup = BeautifulSoup(response.text, features="html5lib")
     versions_table = soup.find(id="tableWraper")
-    versions_table = versions_table if versions_table else soup.find('table', class_="gb-table")
+    versions_table = (
+        versions_table if versions_table else soup.find("table", class_="gb-table")
+    )
 
     for row in versions_table.findAll("tr")[1:]:
         cells = row.findAll("td")

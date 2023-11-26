@@ -2,10 +2,11 @@ import datetime
 import json
 import re
 import sys
+
 from common import endoflife
 
 METHOD = "maven"
-VERSION_REGEX = r'^\d+\.\d+(\.\d+)?$'
+VERSION_REGEX = r"^\d+\.\d+(\.\d+)?$"
 
 
 # TODO: Add support for custom regexes
@@ -33,7 +34,9 @@ def fetch_releases(package_identifier):
         for row in data["response"]["docs"]:
             version = row["v"]
             if valid_version(version):
-                date = datetime.datetime.utcfromtimestamp(row["timestamp"] / 1000).strftime("%Y-%m-%d")
+                date = datetime.datetime.utcfromtimestamp(
+                    row["timestamp"] / 1000
+                ).strftime("%Y-%m-%d")
                 releases[version] = date
                 print(f"{version}: {date}")
 

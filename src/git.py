@@ -1,5 +1,6 @@
-import regex as re
 import sys
+
+import regex as re
 from common import endoflife
 from common.git import Git
 from liquid import Template
@@ -15,8 +16,10 @@ identically named groups (as used in the mariadb product).
 # Default tag template and regex should include tiny version to properly handle blender,
 # craft-cms, exim, gerrit, jquery, kdeplasma, kirby, logstash, nexus, silverstripe
 # and tarantool versions.
-METHOD = 'git'
-DEFAULT_VERSION_REGEX = r"^v?(?P<major>[1-9]\d*)\.(?P<minor>\d+)(\.(?P<patch>\d+)(\.(?P<tiny>\d+))?)?$"
+METHOD = "git"
+DEFAULT_VERSION_REGEX = (
+    r"^v?(?P<major>[1-9]\d*)\.(?P<minor>\d+)(\.(?P<patch>\d+)(\.(?P<tiny>\d+))?)?$"
+)
 DEFAULT_TAG_TEMPLATE = "{{major}}.{{minor}}{% if patch %}.{{patch}}{% if tiny %}.{{tiny}}{%endif%}{%endif%}"
 
 
@@ -35,6 +38,7 @@ def fetch_releases(product_name, url, regex, template):
             print(f"{version}: {date}")
 
     return releases
+
 
 def update_product(product_name, configs):
     versions = {}

@@ -1,4 +1,5 @@
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -14,7 +15,7 @@ VERSION_REGEX = r"^(\d{4})\/(\d{2})\/(\d{2})\s+:\s+(\d+\.\d+\.\d.?)$"
 def fetch_cycles():
     cycles = []
 
-    response = endoflife.fetch_url('https://www.haproxy.org/download/')
+    response = endoflife.fetch_url("https://www.haproxy.org/download/")
     soup = BeautifulSoup(response, features="html5lib")
     for link in soup.select("a"):
         m = re.match(CYCLE_REGEX, link.attrs["href"])
@@ -31,9 +32,11 @@ def fetch_cycles():
 def fetch_releases(cycles):
     releases = {}
 
-    urls = [f"https://www.haproxy.org/download/{cycle}/src/CHANGELOG" for cycle in cycles]
+    urls = [
+        f"https://www.haproxy.org/download/{cycle}/src/CHANGELOG" for cycle in cycles
+    ]
     for response in endoflife.fetch_urls(urls):
-        for line in response.text.split('\n'):
+        for line in response.text.split("\n"):
             m = re.match(VERSION_REGEX, line)
             if m:
                 year, month, day, version = m.groups()

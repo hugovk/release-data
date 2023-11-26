@@ -1,5 +1,6 @@
 import datetime as dt
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -42,4 +43,4 @@ def parse_platforms_pages():
 
 
 versions = parse_platforms_pages()
-endoflife.write_releases('eks', versions)
+endoflife.write_releases("eks", versions)

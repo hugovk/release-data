@@ -1,13 +1,12 @@
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 
 PRODUCT = "sles"
 URL = "https://www.suse.com/lifecycle"
 
 
 def strip_version(version_str):
-    return version_str.strip("SUSE Linux Enterprise Server ").replace(' SP', '.')
+    return version_str.strip("SUSE Linux Enterprise Server ").replace(" SP", ".")
 
 
 def fetch_releases():
@@ -15,7 +14,9 @@ def fetch_releases():
     soup = BeautifulSoup(response, features="html5lib")
     products_table = soup.find("tbody", id="productSupportLifecycle")
     # Get rows with SLES products
-    sles_header_rows = products_table.find_all("tr", class_="row", attrs={"data-productfilter": "SUSE Linux Enterprise Server"})
+    sles_header_rows = products_table.find_all(
+        "tr", class_="row", attrs={"data-productfilter": "SUSE Linux Enterprise Server"}
+    )
     # Extract rows' IDs to find related sub-rows with details (normally hidden
     # until a user expands a section)
     sles_detail_ids = [f"detail{row['id']}" for row in sles_header_rows]

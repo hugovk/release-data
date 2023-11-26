@@ -4,18 +4,25 @@ from subprocess import run
 
 
 class Git:
-    """Git cli wrapper
-    """
+    """Git cli wrapper"""
 
     def __init__(self, url: str):
         self.url: str = url
-        self.repo_dir: Path = Path(f"~/.cache/git/{sha1(url.encode()).hexdigest()}").expanduser()
+        self.repo_dir: Path = Path(
+            f"~/.cache/git/{sha1(url.encode()).hexdigest()}"
+        ).expanduser()
 
     def _run(self, cmd: str) -> list:
-        """Run git command and return command result as a list of lines.
-        """
+        """Run git command and return command result as a list of lines."""
         try:
-            child = run(f"git {cmd}", capture_output=True, timeout=300, check=True, shell=True, cwd=self.repo_dir)
+            child = run(
+                f"git {cmd}",
+                capture_output=True,
+                timeout=300,
+                check=True,
+                shell=True,
+                cwd=self.repo_dir,
+            )
             return child.stdout.decode("utf-8").strip().split("\n")
         except ChildProcessError as ex:
             raise RuntimeError(f"Failed to run '{cmd}': {ex}")
@@ -39,7 +46,9 @@ class Git:
         # Using --force to avoid error like "would clobber existing tag".
         # See https://stackoverflow.com/questions/58031165/how-to-get-rid-of-would-clobber-existing-tag.
         self._run("fetch --force --tags --filter=blob:none --depth=1 origin")
-        tags_with_date = self._run("tag --list --format='%(refname:strip=2) %(creatordate:short)'")
+        tags_with_date = self._run(
+            "tag --list --format='%(refname:strip=2) %(creatordate:short)'"
+        )
         return [tag_with_date.split(" ") for tag_with_date in tags_with_date]
 
     def list_branches(self, pattern: str):

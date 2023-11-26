@@ -1,10 +1,11 @@
 import re
 import sys
+
 from bs4 import BeautifulSoup
 from common import endoflife
 from liquid import Template
 
-METHOD = 'distrowatch'
+METHOD = "distrowatch"
 DEFAULT_TAG_TEMPLATE = (  # Same as used in Ruby (update.rb)
     "{{major}}{% if minor %}.{{minor}}{% if patch %}.{{patch}}{%endif%}{%endif%}"
 )

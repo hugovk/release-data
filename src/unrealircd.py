@@ -1,5 +1,6 @@
-import mwparserfromhell
 import re
+
+import mwparserfromhell
 from common import endoflife
 
 URL = "https://www.unrealircd.org/docwiki/index.php?title=History_of_UnrealIRCd_releases&action=raw"
@@ -20,5 +21,5 @@ for tr in wikicode.ifilter_tags(matches=lambda node: node.tag == "tr"):
                 versions[maybe_version] = maybe_date
                 print(f"{maybe_version}: {maybe_date}")
 
-endoflife.write_releases('unrealircd', versions)
+endoflife.write_releases("unrealircd", versions)
 print("::endgroup::")

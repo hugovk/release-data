@@ -1,15 +1,16 @@
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 
 URL = "https://www.graalvm.org/release-calendar/"
 # https://regex101.com/r/877ibq/1
 regex = r"RHEL (?P<major>\d)(\. ?(?P<minor>\d+))?(( Update (?P<minor2>\d))| GA)?"
 
+
 def split_versions(text):
     # GraalVM for JDK versions has to be prefixed as their release cycle collide
     # with older GraalVM release cycles. Example: GraalVM for JDK 20 and 20.0.
     return text.replace("GraalVM for JDK ", "jdk-").split(", ")
+
 
 print("::group::graalvm")
 response = endoflife.fetch_url(URL)
@@ -24,5 +25,5 @@ for tr in soup.findAll("table")[1].find("tbody").findAll("tr"):
         versions[version] = date
         print(f"{version}: {date}")
 
-endoflife.write_releases('graalvm', versions)
+endoflife.write_releases("graalvm", versions)
 print("::endgroup::")

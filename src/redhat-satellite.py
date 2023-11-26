@@ -1,4 +1,5 @@
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -22,14 +23,14 @@ for table in soup.findAll("tbody"):
         td_list = tr.findAll("td")
 
         # Versions x.y GA are transformed to x.y.0
-        version = td_list[0].get_text().replace(' GA', '.0').strip()
+        version = td_list[0].get_text().replace(" GA", ".0").strip()
         m = re.match(regex, version)
         if m:
             # Versions a.b.c-d are transformed to a.b.c.d
-            version = m["version"].replace('-', '.')
+            version = m["version"].replace("-", ".")
             date = td_list[1].get_text().strip()
             versions[version] = date
             print(f"{version}: {date}")
 
-endoflife.write_releases('redhat-satellite', versions)
+endoflife.write_releases("redhat-satellite", versions)
 print("::endgroup::")

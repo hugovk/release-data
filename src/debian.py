@@ -1,4 +1,5 @@
 import subprocess
+
 from common import endoflife
 from common.git import Git
 
@@ -15,12 +16,14 @@ def extract_major_releases(releases, repo_dir):
         f"| cut -d '<' -f 2 "
         f"| cut -d '>' -f 2 "
         f"| grep -v -- '--'",
-        shell=True, stdout=subprocess.PIPE)
-    output = child.communicate()[0].decode('utf-8')
+        shell=True,
+        stdout=subprocess.PIPE,
+    )
+    output = child.communicate()[0].decode("utf-8")
 
     is_release_line = True
     version = None
-    for line in output.split('\n'):
+    for line in output.split("\n"):
         if line:
             if is_release_line:
                 version = line.split(" ")[1]
@@ -40,16 +43,19 @@ def extract_point_releases(releases, repo_dir):
         "| tr -d '<' "
         "| sed 's/[[:space:]]+/ /' "
         "| paste -d ' ' - -",
-        shell=True, stdout=subprocess.PIPE)
-    output = child.communicate()[0].decode('utf-8')
+        shell=True,
+        stdout=subprocess.PIPE,
+    )
+    output = child.communicate()[0].decode("utf-8")
 
-    for line in output.split('\n'):
+    for line in output.split("\n"):
         if line:
-            parts = line.split(' ')
+            parts = line.split(" ")
             date = parts[0]
             version = parts[1]
             print(f"{version}: {date}")
             releases[version] = date
+
 
 print(f"::group::{PRODUCT}")
 git = Git(REPO_URL)

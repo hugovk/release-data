@@ -1,13 +1,14 @@
 import json
+
 from common import endoflife
 
 """Fetch Nutanix products versions with their dates from https://portal.nutanix.com/api/v1.
 """
 
 PRODUCTS = {
-    'nutanix-aos': 'NOS',
-    'nutanix-files': 'FILES',
-    'nutanix-prism': 'PC',
+    "nutanix-aos": "NOS",
+    "nutanix-files": "FILES",
+    "nutanix-prism": "PC",
 }
 
 BASE_URL = "https://portal.nutanix.com/api/v1/eol/find?type="
@@ -21,7 +22,7 @@ def fetch_releases(product_code):
     data = json.loads(response)
 
     for version_data in data["contents"]:
-        if 'GENERAL_AVAILABILITY' in version_data:
+        if "GENERAL_AVAILABILITY" in version_data:
             version = version_data["version"]
             date = version_data["GENERAL_AVAILABILITY"].split("T")[0]
             versions[version] = date

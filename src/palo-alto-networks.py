@@ -1,5 +1,6 @@
 import datetime
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -38,7 +39,7 @@ def update_releases(html_identifier, file):
             except ValueError:
                 # A few dates have 1st, 2nd, 4th etc. Fix that:
                 d = td_list[1].get_text()
-                d = re.sub(r'(\w+) (\d{1,2})(?:\w{2}), (\d{4})', r'\1 \2, \3', d)
+                d = re.sub(r"(\w+) (\d{1,2})(?:\w{2}), (\d{4})", r"\1 \2, \3", d)
                 date = datetime.datetime.strptime(d, "%B %d, %Y")
                 abs_date = date.strftime("%Y-%m-%d")
 

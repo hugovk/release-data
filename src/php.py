@@ -1,6 +1,6 @@
 import json
-from common import dates
-from common import endoflife
+
+from common import dates, endoflife
 
 PHP_MAJOR_VERSIONS = [4, 5, 7, 8]
 
@@ -21,5 +21,5 @@ versions = {}
 for major_version in PHP_MAJOR_VERSIONS:
     versions |= fetch_versions(major_version)
 
-endoflife.write_releases('php', versions)
+endoflife.write_releases("php", versions)
 print("::endgroup::")

@@ -1,4 +1,5 @@
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -25,5 +26,5 @@ for tr in soup.findAll("tr"):
         versions[version] = date
         print(f"{version}: {date}")
 
-endoflife.write_releases('redhat', versions)
+endoflife.write_releases("redhat", versions)
 print("::endgroup::")

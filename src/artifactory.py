@@ -1,5 +1,4 @@
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 from requests_html import HTMLSession
 
 URL = "https://jfrog.com/help/r/jfrog-release-information/artifactory-end-of-life"
@@ -18,7 +17,7 @@ def fetch_releases():
     r = session.get(URL)
     r.html.render(sleep=2, scrolldown=5)
 
-    for row in r.html.find('.informaltable tbody tr'):
+    for row in r.html.find(".informaltable tbody tr"):
         cells = row.find("td")
         if len(cells) >= 2:
             version = cells[0].text.strip()
@@ -30,7 +29,7 @@ def fetch_releases():
 
     # 7.29.9 release date is wrong on https://jfrog.com/help/r/jfrog-release-information/artifactory-end-of-life.
     # Sent a mail to jfrog-help-center-feedback@jfrog.com to fix it, but in the meantime...
-    result['7.29.9'] = '2022-01-11'
+    result["7.29.9"] = "2022-01-11"
     return result
 
 

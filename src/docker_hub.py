@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+
 from common import endoflife
 
 METHOD = "docker_hub"
@@ -22,7 +23,7 @@ def fetch_releases(url, regex, releases):
                 matches = True
 
         if matches:
-            date = result['tag_last_pushed'].split("T")[0]
+            date = result["tag_last_pushed"].split("T")[0]
             releases[version] = date
             print(f"{version}: {date}")
 

@@ -1,6 +1,7 @@
 import re
-import sys
 import subprocess
+import sys
+
 from common import endoflife
 
 METHOD = "github_releases"
@@ -16,7 +17,7 @@ REGEX = r"^(?:(\d+\.(?:\d+\.)*\d+))$"
 # - using a library, such as graphql-python, is sightly harder than using the
 #   GitHub CLI (and still requires a GITHUB_TOKEN).
 def fetch_json(repo_id):
-    (owner, repo) = repo_id.split('/')
+    (owner, repo) = repo_id.split("/")
     query = """gh api graphql --paginate -f query='
 query($endCursor: String) {
   repository(name: "%s", owner: "%s") {
@@ -36,10 +37,13 @@ query($endCursor: String) {
     }
   }
 }' --jq '.data.repository.releases.edges.[].node | select(.isPrerelease == false) | [.name, .publishedAt] | join(",")'
-""" % (repo, owner)  # noqa: UP031
+""" % (
+        repo,
+        owner,
+    )
 
     child = subprocess.Popen(query, shell=True, stdout=subprocess.PIPE)
-    return child.communicate()[0].decode('utf-8')
+    return child.communicate()[0].decode("utf-8")
 
 
 def fetch_releases(repo_id, regex):
@@ -52,7 +56,7 @@ def fetch_releases(repo_id, regex):
     regex = [regex] if not isinstance(regex, list) else regex
 
     for release in fetch_json(repo_id).splitlines():
-        (raw_version, raw_date) = release.split(',')
+        (raw_version, raw_date) = release.split(",")
 
         for r in regex:
             match = re.search(r, raw_version)

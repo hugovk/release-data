@@ -1,4 +1,5 @@
 import json
+
 from common import endoflife
 
 PRODUCT = "typo3"
@@ -10,7 +11,7 @@ versions = {}
 response = endoflife.fetch_url(URL)
 data = json.loads(response)
 for v in data:
-    if v['type'] != 'development':
+    if v["type"] != "development":
         date = v["date"][0:10]
         versions[v["version"]] = date
         print(f"{v['version']}: {date}")

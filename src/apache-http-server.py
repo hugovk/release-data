@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
-from common import dates
-from common import endoflife
+
+from common import dates, endoflife
 from common.git import Git
 
 """Fetch apache versions from its git repository.
@@ -30,19 +30,28 @@ def fetch_versions_from_file(release_notes_file: Path, versions: dict):
         plain = f.read().decode("utf-8", errors="ignore")
 
     # for most versions
-    for (version, date_str) in re.findall(r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*(?:Released|Announced|Released and Retired)\s(?:on\s)?(?P<date>\w+\s\d\d?,\s\d{4})", plain):
+    for version, date_str in re.findall(
+        r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*(?:Released|Announced|Released and Retired)\s(?:on\s)?(?P<date>\w+\s\d\d?,\s\d{4})",
+        plain,
+    ):
         date = parse(date_str)
         versions[version] = date
         print(f"{version}: {date}")
 
     # for older 2.0.x versions (only GA versions are considered)
-    for (version, date_str) in re.findall(r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*released\s(?P<date>\w+\s\d\d?,\s\d{4}) as GA", plain):
+    for version, date_str in re.findall(
+        r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*released\s(?P<date>\w+\s\d\d?,\s\d{4}) as GA",
+        plain,
+    ):
         date = parse(date_str)
         versions[version] = date
         print(f"{version}: {date}")
 
     # for older 1.3.x versions, we take the date of the tag and not the date of the release (too difficult to parse)
-    for (version, date_str) in re.findall(r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*Tagged and [rR]olled\s(?:on\s)?(?P<date>\w+\.?\s\d\d?,\s\d{4})", plain):
+    for version, date_str in re.findall(
+        r"\s+(?P<version>\d+\.\d+\.\d+)\s*:.*Tagged and [rR]olled\s(?:on\s)?(?P<date>\w+\.?\s\d\d?,\s\d{4})",
+        plain,
+    ):
         date = parse(date_str)
         versions[version] = date
         print(f"{version}: {date}")

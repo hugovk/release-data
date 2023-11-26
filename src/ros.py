@@ -1,5 +1,6 @@
 import datetime
 import re
+
 from bs4 import BeautifulSoup
 from common import endoflife
 
@@ -32,5 +33,5 @@ for tr in soup.findAll("tr"):
             versions[version] = abs_date
             print(f"{version}: {abs_date}")
 
-endoflife.write_releases('ros', versions)
+endoflife.write_releases("ros", versions)
 print("::endgroup::")

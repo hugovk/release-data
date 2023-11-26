@@ -1,5 +1,5 @@
-from requests_html import HTMLSession
 from common import endoflife
+from requests_html import HTMLSession
 
 """Fetch Java versions with their dates from https://www.java.com/releases/.
 
@@ -20,17 +20,17 @@ URL = "https://www.java.com/releases/"
 
 def fetch_releases():
     session = HTMLSession()
-    r = session.get('https://www.java.com/releases/')
+    r = session.get("https://www.java.com/releases/")
     r.html.render(sleep=1, scrolldown=3)
 
     releases = {}
     previous_date = None
-    for row in r.html.find('#released tr'):
-        version_cell = row.find('td.anchor', first=True)
+    for row in r.html.find("#released tr"):
+        version_cell = row.find("td.anchor", first=True)
 
         if version_cell:
-            version = version_cell.attrs['id']
-            date = row.find('td')[1].text
+            version = version_cell.attrs["id"]
+            date = row.find("td")[1].text
             date = previous_date if not date else date
             print(f"{version}: {date}")
             releases[version] = date
@@ -41,6 +41,6 @@ def fetch_releases():
 
 print(f"::group::{PRODUCT}")
 all_versions = fetch_releases()
-all_versions.pop('1.0_alpha')  # only version we don't want, regex not needed
+all_versions.pop("1.0_alpha")  # only version we don't want, regex not needed
 endoflife.write_releases(PRODUCT, all_versions)
 print("::endgroup::")

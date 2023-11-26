@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+
 from common import endoflife
 
 METHOD = "npm"

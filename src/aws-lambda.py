@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from bs4 import BeautifulSoup
 from common import endoflife
-from datetime import datetime
 
 """Fetch new AWS lambda runtimes from https://docs.aws.amazon.com.
 
@@ -16,15 +17,15 @@ if it was possible to disable release / latest release dates updates in the
 latest.py script.
 """
 
-PRODUCT = 'aws-lambda'
-URL = 'https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html'
+PRODUCT = "aws-lambda"
+URL = "https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html"
 
 
 def fetch_product_file_release_date(releaseCycle, product):
-    if 'releases' in product.keys():
-        for release in product['releases']:
-            if releaseCycle == release['releaseCycle']:
-                return release['releaseDate'].strftime("%Y-%m-%d")
+    if "releases" in product.keys():
+        for release in product["releases"]:
+            if releaseCycle == release["releaseCycle"]:
+                return release["releaseDate"].strftime("%Y-%m-%d")
 
     return datetime.now().strftime("%Y-%m-%d")
 

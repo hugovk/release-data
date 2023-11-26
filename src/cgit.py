@@ -1,8 +1,8 @@
 import re
 import sys
+
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 from liquid import Template
 
 """Fetch versions with their dates from a cgit repository, such as
@@ -12,18 +12,16 @@ Ideally we would want to use the git repository directly, but cgit repositories
 do not support partial clone so we cannot.
 """
 
-METHOD = 'cgit'
+METHOD = "cgit"
 # Same as used in Ruby (update.rb)
-DEFAULT_TAG_TEMPLATE = (
-    "{{major}}{% if minor %}.{{minor}}{% if patch %}.{{patch}}{%if tiny %}.{{tiny}}{%endif%}{%endif%}{%endif%}"
-)
+DEFAULT_TAG_TEMPLATE = "{{major}}{% if minor %}.{{minor}}{% if patch %}.{{patch}}{%if tiny %}.{{tiny}}{%endif%}{%endif%}{%endif%}"
 DEFAULT_VERSION_REGEX = (
     r"^v?(?P<major>\d+)\.(?P<minor>\d+)\.?(?P<patch>\d+)?\.?(?P<tiny>\d+)?$"
 )
 
 
 def make_bs_request(url):
-    response = endoflife.fetch_url(url + '/refs/tags')
+    response = endoflife.fetch_url(url + "/refs/tags")
     return BeautifulSoup(response, features="html5lib")
 
 

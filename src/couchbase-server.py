@@ -1,7 +1,7 @@
 import re
+
 from bs4 import BeautifulSoup
-from common import dates
-from common import endoflife
+from common import dates, endoflife
 
 """Fetch versions with their dates from docs.couchbase.com.
 
@@ -32,21 +32,30 @@ versions = {}
 response = endoflife.fetch_url(f"{URLS}/current/install/install-intro.html")
 soup = BeautifulSoup(response, features="html5lib")
 
-minor_versions = [options.attrs["value"] for options in soup.find(class_="version_list").find_all("option")]
+minor_versions = [
+    options.attrs["value"]
+    for options in soup.find(class_="version_list").find_all("option")
+]
 
 # there is no date available for x.y.0
 for minor in minor_versions:
-    versions[minor + '.0'] = 'N/A'
+    versions[minor + ".0"] = "N/A"
 
-minor_version_urls = [f"{URLS}/{minor}/release-notes/relnotes.html" for minor in minor_versions]
+minor_version_urls = [
+    f"{URLS}/{minor}/release-notes/relnotes.html" for minor in minor_versions
+]
 for response in endoflife.fetch_urls(minor_version_urls):
     soup = BeautifulSoup(response.text, features="html5lib")
     for title in soup.find_all("h2"):
         versionAndDate = title.get_text().strip()
         m = re.match(REGEX, versionAndDate)
         if m:
-            version = f"{m['version']}.0" if len(m['version'].split('.')) == 2 else m['version']
-            date = dates.parse_month_year_date(m['date']).strftime("%Y-%m-%d")
+            version = (
+                f"{m['version']}.0"
+                if len(m["version"].split(".")) == 2
+                else m["version"]
+            )
+            date = dates.parse_month_year_date(m["date"]).strftime("%Y-%m-%d")
             versions[version] = date
             print(f"{version}: {date}")
 
